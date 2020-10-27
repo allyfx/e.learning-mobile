@@ -1,11 +1,18 @@
 import React from 'react';
 import { StyleSheet, View, Image, ImageBackground, Text } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 
 import landingImage from '../assets/landing-image.png';
 import eLearning from '../assets/e.learning.png';
 
 export default function Landing() {
+    const navigation = useNavigation();
+
+    function handleNavigateToDashboard() {
+        navigation.navigate('Dashboard');
+    }
+
     return(
         <ImageBackground source={eLearning} style={{ width: 467, height: 506, flex: 1, alignSelf: "center" }}>
             <View style={styles.container}>
@@ -14,7 +21,7 @@ export default function Landing() {
                 <Text style={styles.content}>
                     Entre na plataforma e acesse cursos de diversas áreas de conhecimento.
                 </Text>
-                <RectButton style={styles.button}>
+                <RectButton style={styles.button} onPress={handleNavigateToDashboard}>
                     <Text style={styles.buttonText}>Começar os estudos</Text>
                 </RectButton>
             </View>
