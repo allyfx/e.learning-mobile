@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet ,View, Text } from 'react-native';
 
-import DashboardHeader from '../components/DashboardHeader';
+import DashboardFooter from '../components/DashboardFooter';
 
 export default function Dashboard() {
     return (
@@ -9,7 +9,7 @@ export default function Dashboard() {
             <View style={styles.content}>
                 <Text>Hello World!</Text>
             </View>
-            <DashboardHeader />
+            <DashboardFooter />
         </View>
     );
 }
