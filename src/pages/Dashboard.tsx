@@ -1,15 +1,36 @@
 import React, { useState } from 'react';
-import { StyleSheet ,View, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet ,View, Text, TextInput, TouchableOpacity, Dimensions, Image } from 'react-native';
+import { RectButton } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 
 import { Feather } from '@expo/vector-icons';
 
+import logoImg from '../assets/logo.png';
+
 export default function Dashboard() {
+    const navigation = useNavigation();
     const [selected, setSelected] = useState<'home' | 'saves'>('home');
 
     return (
         <View style={styles.container}>
+            <View style={styles.header}>
+                <View style={styles.headerContent}>
+                    <Image style={styles.headerImage} source={logoImg} />
+                    <Feather
+                        name="power"
+                        size={24}
+                        color="#FF6680"
+                        onPress={() => {navigation.navigate('Landing')}}
+                    />
+                </View>
+                
+                <RectButton style={styles.headerSearchButton}>
+                    <Feather name="search" size={20} color="#C4C4D1"/>
+                    <TextInput style={styles.headerSeachText} placeholder="Buscar" />
+                </RectButton>
+            </View>
             <View style={styles.content}>
-                <Text>Hello World!</Text>
+                <Text>Aqui vai o conteúdo!</Text>
             </View>
             <View style={styles.footer}>
                 <TouchableOpacity
@@ -18,6 +39,8 @@ export default function Dashboard() {
                             ? styles.buttonButtonSelected
                             : styles.buttonButton
                     }
+                    onPress={() => {setSelected('home')}}
+                    activeOpacity={1}
                 >
                     <Feather
                         style={
@@ -45,6 +68,8 @@ export default function Dashboard() {
                             ? styles.buttonButtonSelected
                             : styles.buttonButton
                     }
+                    onPress={() => {setSelected('saves')}}
+                    activeOpacity={1}
                 >
                     <Feather
                         style={
@@ -71,12 +96,49 @@ export default function Dashboard() {
 }
 
 const styles = StyleSheet.create({
+    // General styles
     container: {
         flex: 1,
     },
     content: {
         flex: 1,
     },
+
+    // Header styles
+    header: {
+        width: Dimensions.get("window").width,
+        height: 150,
+        padding: 24,
+    },
+    headerImage: {
+        height: 24,
+    },
+    headerContent: {
+        flexDirection: 'row',
+        alignItems: "center",
+        justifyContent: "space-between",
+    },
+    headerSearchButton: {
+        width: 330,
+        height: 56,
+        borderRadius: 100,
+        backgroundColor: "#FFF",
+        padding: 20,
+        marginTop: 20,
+
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+    },
+    headerSeachText: {
+        width: 330,
+        height: 56,
+        fontFamily: 'Roboto_400Regular',
+        fontSize: 15,
+        marginLeft: 20,
+    },
+
+    // Footer Styles
     footer: {
         flexDirection: "row",
         alignItems: "center",
