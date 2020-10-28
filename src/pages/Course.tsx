@@ -36,7 +36,7 @@ export default function Course() {
 
                 <View style={styles.lessonsContainer}>
                     <RectButton style={styles.lessonButton}>
-                        <View style={styles.playButtonView}>
+                        <View style={styles.playButtonViewComplete}>
                             <Image source={playIcon} />
                         </View>
 
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
-    playButtonView: {
+    playButtonViewComplete: {
         position: "absolute",
         left: -25,
         top: '16%',
@@ -143,6 +143,20 @@ const styles = StyleSheet.create({
         width: 68,
         height: 68,
         backgroundColor: "#61C5BD",
+        borderRadius: 16,
+
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    playButtonView: {
+        position: "absolute",
+        left: -25,
+        top: '16%',
+        elevation: 1,
+
+        width: 68,
+        height: 68,
+        backgroundColor: "#FF6680",
         borderRadius: 16,
 
         alignItems: "center",
