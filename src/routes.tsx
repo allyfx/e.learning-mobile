@@ -8,6 +8,7 @@ const { Navigator, Screen } = createStackNavigator();
 import Landing from './pages/Landing';
 import Dashboard from './pages/Dashboard';
 import Course from './pages/Course';
+import Lesson from './pages/Lesson';
 
 export default function Routes() {
     return (
@@ -16,6 +17,7 @@ export default function Routes() {
                 <Screen name="Landing" component={Landing} />
                 <Screen name="Dashboard" component={Dashboard} />
                 <Screen name="Course" component={Course} />
+                <Screen name="Lesson" component={Lesson} />
             </Navigator>
         </NavigationContainer>
     );

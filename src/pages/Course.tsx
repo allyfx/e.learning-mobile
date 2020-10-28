@@ -1,18 +1,25 @@
 import React, { useState } from 'react';
-import { StyleSheet, ScrollView, View, Text, Image } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, Image, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { RectButton } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 
 import logoImg from '../assets/logo.png';
 import playIcon from '../assets/play.png';
 
 export default function Course() {
+    const navigation = useNavigation();
     const [like, setLike] = useState(false);
 
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
-                <AntDesign name="arrowleft" size={28} color="#FF6680" />
+                <RectButton
+                    style={styles.headerHeartButton}
+                    onPress={() => navigation.goBack()}
+                >
+                    <AntDesign name="arrowleft" size={28} color="#FF6680" />
+                </RectButton>
 
                 <Image source={logoImg} />
 
@@ -35,7 +42,11 @@ export default function Course() {
                 </View>
 
                 <View style={styles.lessonsContainer}>
-                    <RectButton style={styles.lessonButton}>
+                    <TouchableOpacity 
+                        activeOpacity={1}
+                        style={styles.lessonButton}
+                        onPress={() => { navigation.navigate('Lesson') }}
+                    >
                         <View style={styles.playButtonViewComplete}>
                             <Image source={playIcon} />
                         </View>
@@ -56,7 +67,7 @@ export default function Course() {
                                 </View>
                             </View>
                         </View>
-                    </RectButton>
+                    </TouchableOpacity>
                 </View>
             </ScrollView>
         </View>
