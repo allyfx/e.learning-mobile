@@ -1,10 +1,13 @@
 import React from 'react';
 import { StyleSheet, ScrollView, View, Text, Image } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 
 import mathIcon from '../../assets/mathIcon.png';
 
 export default function Category() {
+    const navigation = useNavigation();
+
     return (
         <ScrollView style={styles.container}>
             <View style={styles.headerContainer}>
@@ -13,7 +16,10 @@ export default function Category() {
             </View>
 
             <View style={styles.courseContainer}>
-                <RectButton style={styles.courseButton}>
+                <RectButton
+                    style={styles.courseButton}
+                    onPress={() => navigation.navigate('Course')}
+                >
                     <Image style={styles.courseImage} source={mathIcon} />
                     <Text style={styles.courseTitle}>Matemática</Text>
                     <Text style={styles.courseCountLessons}>16 aulas</Text>

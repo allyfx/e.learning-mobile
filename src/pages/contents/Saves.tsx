@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { StyleSheet, ScrollView, View, Text, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, Image } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 
 import DeleteAlert from '../../components/DeleteAlert';
@@ -8,6 +9,7 @@ import DeleteAlert from '../../components/DeleteAlert';
 import mathIcon from '../../assets/mathIcon.png';
 
 export default function Category() {
+    const navigation = useNavigation();
     const [selectedAlertOption, setSelectedAlertOption] = useState<'deny' | 'confirm' | null>(null);
     const [showModal, setShowModal] = useState(false);
 
@@ -36,7 +38,10 @@ export default function Category() {
                 </View>
 
                 <View style={styles.courseContainer}>
-                    <RectButton style={styles.courseButton} >
+                    <RectButton
+                        style={styles.courseButton}
+                        onPress={() => navigation.navigate('Course')}
+                    >
                         <RectButton
                             style={{
                                 width: 50,
