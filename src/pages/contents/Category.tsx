@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, ScrollView, View, Text, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, Image } from 'react-native';
+import { RectButton } from 'react-native-gesture-handler';
 
 import mathIcon from '../../assets/mathIcon.png';
 
@@ -12,11 +13,11 @@ export default function Category() {
             </View>
 
             <View style={styles.courseContainer}>
-                <TouchableOpacity style={styles.courseButton}>
+                <RectButton style={styles.courseButton}>
                     <Image style={styles.courseImage} source={mathIcon} />
                     <Text style={styles.courseTitle}>Matemática</Text>
                     <Text style={styles.courseCountLessons}>16 aulas</Text>
-                </TouchableOpacity>
+                </RectButton>
             </View>
         </ScrollView>
     );
