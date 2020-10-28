@@ -1,40 +1,68 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, ScrollView, View, Text, TouchableOpacity, Image } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { Feather } from '@expo/vector-icons';
 
+import DeleteAlert from '../../components/DeleteAlert';
+
 import mathIcon from '../../assets/mathIcon.png';
 
 export default function Category() {
-    return (
-        <ScrollView style={styles.container}>
-            <View style={styles.headerContainer}>
-                <Text style={styles.headerTitle}>Cursos salvos</Text>
-            </View>
+    const [selectedAlertOption, setSelectedAlertOption] = useState<'deny' | 'confirm' | null>(null);
+    const [showModal, setShowModal] = useState(false);
 
-            <View style={styles.courseContainer}>
-                <RectButton style={styles.courseButton} >
-                    <RectButton
-                        style={{
-                            width: 30,
-                            height: 30,
-                            position: "absolute",
-                            right: 8,
-                            top: 10,
-                        }}
-                    >
-                        <Feather
-                            name="trash"
-                            color="#C4C4D1"
-                            size={24}
-                        />
+    const selectedOption = (data: 'deny' | 'confirm') => {
+        setSelectedAlertOption(data);
+    }
+
+    const showModalToggle = () => {
+        setShowModal(!showModal);
+    }
+
+    return (
+        <>
+            {showModal && (
+                <DeleteAlert
+                    showAlert={showModal}
+                    text="Quer excluir suas aulas de Matemática?"
+                    selectedOption={selectedOption}
+                    showModalToggle={showModalToggle}
+                />
+            )}
+
+            <ScrollView style={styles.container}>
+                <View style={styles.headerContainer}>
+                    <Text style={styles.headerTitle}>Cursos salvos</Text>
+                </View>
+
+                <View style={styles.courseContainer}>
+                    <RectButton style={styles.courseButton} >
+                        <RectButton
+                            style={{
+                                width: 50,
+                                height: 50,
+                                position: "absolute",
+                                right: 2,
+                                top: 5,
+
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}
+                            onPress={() => showModalToggle()}
+                        >
+                            <Feather
+                                name="trash"
+                                color="#C4C4D1"
+                                size={22}
+                            />
+                        </RectButton>
+                        <Image style={styles.courseImage} source={mathIcon} />
+                        <Text style={styles.courseTitle}>Matemática</Text>
+                        <Text style={styles.courseCountLessons}>16 aulas</Text>
                     </RectButton>
-                    <Image style={styles.courseImage} source={mathIcon} />
-                    <Text style={styles.courseTitle}>Matemática</Text>
-                    <Text style={styles.courseCountLessons}>16 aulas</Text>
-                </RectButton>
-            </View>
-        </ScrollView>
+                </View>
+            </ScrollView>
+        </>
     );
 }
 
