@@ -5,6 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 
 import { Feather } from '@expo/vector-icons';
 
+import Category from './contents/Category';
+
 import logoImg from '../assets/logo.png';
 
 export default function Dashboard() {
@@ -29,9 +31,11 @@ export default function Dashboard() {
                     <TextInput style={styles.headerSeachText} placeholder="Buscar" />
                 </RectButton>
             </View>
+            
             <View style={styles.content}>
-                <Text>Aqui vai o conteúdo!</Text>
+                <Category />
             </View>
+
             <View style={styles.footer}>
                 <TouchableOpacity
                     style={
