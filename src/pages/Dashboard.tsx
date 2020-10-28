@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 
 import Category from './contents/Category';
+import Saves from './contents/Saves';
 
 import logoImg from '../assets/logo.png';
 
@@ -33,7 +34,11 @@ export default function Dashboard() {
             </View>
             
             <View style={styles.content}>
-                <Category />
+                {selected === 'home' ? (
+                    <Category />
+                ) : (
+                    <Saves />
+                )}
             </View>
 
             <View style={styles.footer}>
