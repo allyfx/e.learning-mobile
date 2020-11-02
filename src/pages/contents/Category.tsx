@@ -11,6 +11,7 @@ interface Course {
     id: string;
     name: string;
     image: string;
+    lessons?: number;
 }
 
 export default function Category() {
@@ -40,7 +41,7 @@ export default function Category() {
                         >
                             <Image style={styles.courseImage} source={mathIcon} />
                             <Text style={styles.courseTitle}>{course.name}</Text>
-                            <Text style={styles.courseCountLessons}>16 aulas</Text>
+                            <Text style={styles.courseCountLessons}>{course.lessons} aulas</Text>
                         </RectButton>
                     );
                 })}
