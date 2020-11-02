@@ -1,29 +1,49 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, View, Text, Image } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 
+import api from '../../services/api';
+
 import mathIcon from '../../assets/mathIcon.png';
+
+interface Course {
+    id: string;
+    name: string;
+    image: string;
+}
 
 export default function Category() {
     const navigation = useNavigation();
+    const [courses, setCourses] = useState<Course[]>();
+
+    useEffect(() => {
+        api.get('/course/list').then(response => {
+            setCourses(response.data);
+        });
+    }, []);
 
     return (
         <ScrollView style={styles.container}>
             <View style={styles.headerContainer}>
                 <Text style={styles.headerTitle}>Categorias</Text>
-                <Text style={styles.headerCountCourse}>1 cursos</Text>
+                <Text style={styles.headerCountCourse}>{courses?.length} cursos</Text>
             </View>
 
             <View style={styles.courseContainer}>
-                <RectButton
-                    style={styles.courseButton}
-                    onPress={() => navigation.navigate('Course')}
-                >
-                    <Image style={styles.courseImage} source={mathIcon} />
-                    <Text style={styles.courseTitle}>Matemática</Text>
-                    <Text style={styles.courseCountLessons}>16 aulas</Text>
-                </RectButton>
+                {courses?.map(course => {
+                    return (
+                        <RectButton
+                            key={course.id}
+                            style={styles.courseButton}
+                            onPress={() => navigation.navigate('Course')}
+                        >
+                            <Image style={styles.courseImage} source={mathIcon} />
+                            <Text style={styles.courseTitle}>{course.name}</Text>
+                            <Text style={styles.courseCountLessons}>16 aulas</Text>
+                        </RectButton>
+                    );
+                })}
             </View>
         </ScrollView>
     );
