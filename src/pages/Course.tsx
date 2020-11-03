@@ -103,7 +103,7 @@ export default function Course() {
             <ScrollView style={styles.content}>
                 <View style={styles.contentHeaderContainer}>
                     <Text style={styles.contentHeaderTitle}>Matemática</Text>
-                    <Text style={styles.contentHeaderCountCourse}>16 aulas</Text>
+                    <Text style={styles.contentHeaderCountCourse}>{courseLessons?.length ? courseLessons.length : 0} aulas</Text>
                 </View>
 
                 <View style={styles.lessonsContainer}>
