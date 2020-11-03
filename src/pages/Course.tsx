@@ -15,6 +15,7 @@ interface CourseRouteParams {
 
 interface Lesson {
     id: string;
+    course_id: string;
     count: number;
     name: string;
     duration: number;
@@ -113,7 +114,7 @@ export default function Course() {
                                 key={lesson.id}
                                 activeOpacity={1}
                                 style={styles.lessonButton}
-                                onPress={() => { navigation.navigate('Lesson') }}
+                                onPress={() => { navigation.navigate('Lesson',  { id: lesson.course_id, c: lesson.count }) }}
                             >
                                 <View style={styles.playButtonView}>
                                     <Image source={playIcon} />

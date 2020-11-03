@@ -1,16 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, View, Image, Dimensions, Text, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { RectButton } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
+import { Route, useNavigation, useRoute } from '@react-navigation/native';
+import api from '../services/api';
 
 import YoutubePlayer from 'react-native-youtube-iframe';
 
 import logoImg from '../assets/logo.png';
 
+interface RouteParams {
+    id: string;
+    c: number;
+}
+
+interface Lesson {
+    id: string;
+    count: number;
+    name: string;
+    duration: number;
+    description: string;
+    video_id: string;
+}
+
 export default function Lesson() {
+    const route = useRoute();
+    let { id, c } = route.params as RouteParams;
+
     const navigation = useNavigation();
     const [like, setLike] = useState(false);
+    const [lesson, setLesson] = useState<Lesson>();
+    const [count, setCount] = useState(c);
+
+
+    useEffect(() => {
+        api.get(`/lesson/list/${id}`).then(response => {
+            const resLesson = response.data.filter((l: Lesson) => l.count === count);
+
+            console.log(count);
+
+            setLesson(resLesson[0]);
+        });
+    }, [count]);
 
     return (
         <View style={styles.container}>
@@ -49,29 +80,39 @@ export default function Lesson() {
                 </View>
 
                 <View style={styles.lessonContent}>
-                    <Text style={styles.lessonContentTitle}>Introdução à teoria matemática</Text>
+                    <Text style={styles.lessonContentTitle}>{lesson?.name}</Text>
 
                     <View style={styles.lessonContentSpecify}>
-                        <Text style={styles.lessonContentSpecifyLessonText}>Aula 01</Text>
+                        <Text style={styles.lessonContentSpecifyLessonText}>Aula {lesson?.count}</Text>
                         <View style={styles.lessonContentFooterMinutes}>
                             <AntDesign name="clockcircleo" size={12} color="#C4C4D1" />
-                            <Text style={styles.lessonContentSpecifyLessonClockText}>5min</Text>
+                            <Text style={styles.lessonContentSpecifyLessonClockText}>{lesson?.duration}min</Text>
                         </View>
                     </View>
 
-                    <View>
+                    <ScrollView>
                         <Text style={styles.lessonContentDescription}>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam luctus condimentum gravida Aenean condimentum vehicula sapien, eleifend metus congue vel.
+                            {lesson?.description}
                         </Text>
-                    </View>
+                    </ScrollView>
 
                     <View style={styles.buttonsContainer}>
-                        <TouchableOpacity style={styles.goBackButton}>
+                        <TouchableOpacity
+                            style={styles.goBackButton}
+                            onPress={() => {
+                                setCount(count - 1);
+                            }}
+                        >
                             <AntDesign name="arrowleft" size={20} color="#FF6680" />
                             <Text style={styles.goBackButtonText}>Aula anterior</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.nextButton}>
+                        <TouchableOpacity
+                            style={styles.nextButton}
+                            onPress={() => {
+                                setCount(count + 1);
+                            }}
+                        >
                             <Text style={styles.nextButtonText}>Próxima aula</Text>
                             <AntDesign name="arrowright" size={20} color="#FFF" />
                         </TouchableOpacity>
@@ -124,6 +165,7 @@ const styles = StyleSheet.create({
     // Lesson content styles
     lessonContent: {
         padding: 24,
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
     },
@@ -139,6 +181,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Rubik_400Regular',
         fontSize: 15,
         width: 265,
+        height: 230,
         lineHeight: 25,
         color: '#6C6C80',
         marginTop: 25,
@@ -172,7 +215,6 @@ const styles = StyleSheet.create({
 
     // Buttons styles
     buttonsContainer: {
-        marginTop: 100,
         width: '100%',
 
         flexDirection: 'row',
