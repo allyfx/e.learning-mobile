@@ -20,8 +20,8 @@ interface Course {
 export default function Category() {
     const navigation = useNavigation();
     const [courses, setCourses] = useState<Course[]>();
-    const [selectedAlertOption, setSelectedAlertOption] = useState<'deny' | 'confirm' | null>(null);
     const [showModal, setShowModal] = useState(false);
+    const [deleteCourseId, setDeleteCourseId] = useState('');
 
     useEffect(() => {
         AsyncStorage.getItem('SaveCourses').then(response => {
@@ -40,10 +40,25 @@ export default function Category() {
                 });
             }
         });
-    }, []);
+    }, [deleteCourseId]);
 
-    const selectedOption = (data: 'deny' | 'confirm') => {
-        setSelectedAlertOption(data);
+    const selectedOption = async (data: 'deny' | 'confirm', id: string) => {
+        if (data === 'confirm') {
+            const likedCourses = await AsyncStorage.getItem('SaveCourses');
+
+            if(likedCourses) {
+                const liked = JSON.parse(likedCourses);
+
+                const index = liked.indexOf(id);
+
+                liked.splice(index);
+
+
+                await AsyncStorage.setItem('SaveCourses', JSON.stringify(liked));
+            }
+
+            setDeleteCourseId('');
+        }
     }
 
     const showModalToggle = () => {
@@ -54,6 +69,7 @@ export default function Category() {
         <>
             {showModal && (
                 <DeleteAlert
+                    courseId={deleteCourseId}
                     showAlert={showModal}
                     text="Quer excluir suas aulas de Matemática?"
                     selectedOption={selectedOption}
@@ -85,7 +101,10 @@ export default function Category() {
                                         alignItems: "center",
                                         justifyContent: "center",
                                     }}
-                                    onPress={() => showModalToggle()}
+                                    onPress={() => {
+                                        showModalToggle();
+                                        setDeleteCourseId(course.id);
+                                    }}
                                 >
                                     <Feather
                                         name="trash"
@@ -95,7 +114,7 @@ export default function Category() {
                                 </RectButton>
                                 <Image style={styles.courseImage} source={mathIcon} />
                                 <Text style={styles.courseTitle}>{course.name}</Text>
-                                <Text style={styles.courseCountLessons}>{course.lessons} aulas</Text>
+                                <Text style={styles.courseCountLessons}>{course.lessons ? course.lessons : 0} aulas</Text>
                             </RectButton>
                         );
                     })}

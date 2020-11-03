@@ -5,11 +5,12 @@ import { Feather } from '@expo/vector-icons';
 interface DeleteAlertProps {
     showAlert?: boolean;
     text: string;
-    selectedOption(data: 'deny' | 'confirm'): void;
+    courseId: string;
+    selectedOption(data: 'deny' | 'confirm', id: string): Promise<void>;
     showModalToggle(): void;
 }
 
-export default function DeleteAlert({ showAlert = true, text, selectedOption, showModalToggle }: DeleteAlertProps) {
+export default function DeleteAlert({ showAlert = true, text, selectedOption, showModalToggle, courseId }: DeleteAlertProps) {
     const [visible, setVisible] = useState(showAlert);
 
     return (
@@ -26,8 +27,8 @@ export default function DeleteAlert({ showAlert = true, text, selectedOption, sh
                     <View style={styles.buttonsContainer}>
                         <TouchableOpacity
                             style={styles.denyButton}
-                            onPress={() => {
-                                selectedOption('deny');
+                            onPress={async () => {
+                                await selectedOption('deny', courseId);
                                 showModalToggle();
                             }}
                         >
@@ -36,8 +37,8 @@ export default function DeleteAlert({ showAlert = true, text, selectedOption, sh
 
                         <TouchableOpacity
                             style={styles.confirmButton}
-                            onPress={() => {
-                                selectedOption('confirm');
+                            onPress={async () => {
+                                await selectedOption('confirm', courseId);
                                 showModalToggle();
                             }}
                         >

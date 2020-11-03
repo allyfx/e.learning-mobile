@@ -42,7 +42,7 @@ export default function Category() {
                         >
                             <Image style={styles.courseImage} source={mathIcon} />
                             <Text style={styles.courseTitle}>{course.name}</Text>
-                            <Text style={styles.courseCountLessons}>{course.lessons} aulas</Text>
+                            <Text style={styles.courseCountLessons}>{course.lessons ? course.lessons : 0} aulas</Text>
                         </RectButton>
                     );
                 })}
