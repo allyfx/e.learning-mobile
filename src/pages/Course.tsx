@@ -11,6 +11,7 @@ import playIcon from '../assets/play.png';
 
 interface CourseRouteParams {
     id: string;
+    name: string;
 }
 
 interface Lesson {
@@ -27,7 +28,7 @@ export default function Course() {
     const [like, setLike] = useState(false);
     const [courseLessons, setCourseLessons] = useState<Lesson[]>();
 
-    const { id } = route.params as CourseRouteParams;
+    const { id, name } = route.params as CourseRouteParams;
 
     useEffect(() => {
         api.get(`/lesson/list/${id}`).then(response => {
@@ -103,7 +104,7 @@ export default function Course() {
 
             <ScrollView style={styles.content}>
                 <View style={styles.contentHeaderContainer}>
-                    <Text style={styles.contentHeaderTitle}>Matemática</Text>
+                    <Text style={styles.contentHeaderTitle}>{name}</Text>
                     <Text style={styles.contentHeaderCountCourse}>{courseLessons?.length ? courseLessons.length : 0} aulas</Text>
                 </View>
 
@@ -116,7 +117,7 @@ export default function Course() {
                                 style={styles.lessonButton}
                                 onPress={() => { navigation.navigate('Lesson',  { id: lesson.course_id, c: lesson.count }) }}
                             >
-                                <View style={styles.playButtonView}>
+                                <View style={styles.playButtonViewComplete}>
                                     <Image source={playIcon} />
                                 </View>
 

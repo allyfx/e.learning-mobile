@@ -81,7 +81,7 @@ export default function Lesson() {
                         forceAndroidAutoplay={true}
                         height={232}
                         width={Dimensions.get('window').width}
-                        videoId={"7k-7dn6vk-w"}
+                        videoId={lesson?.video_id ? lesson.video_id : ''}
                     />
                 </View>
 

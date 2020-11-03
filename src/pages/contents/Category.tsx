@@ -38,7 +38,7 @@ export default function Category() {
                         <RectButton
                             key={course.id}
                             style={styles.courseButton}
-                            onPress={() => navigation.navigate('Course', { id: course.id })}
+                            onPress={() => navigation.navigate('Course', { id: course.id, name: course.name })}
                         >
                             <Image style={styles.courseImage} source={mathIcon} />
                             <Text style={styles.courseTitle}>{course.name}</Text>
