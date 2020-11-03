@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, View, Text, Image } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import api from '../../services/api';
 
@@ -37,7 +38,7 @@ export default function Category() {
                         <RectButton
                             key={course.id}
                             style={styles.courseButton}
-                            onPress={() => navigation.navigate('Course')}
+                            onPress={() => navigation.navigate('Course', { id: course.id })}
                         >
                             <Image style={styles.courseImage} source={mathIcon} />
                             <Text style={styles.courseTitle}>{course.name}</Text>

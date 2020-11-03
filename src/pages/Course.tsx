@@ -1,15 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, View, Text, Image, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { RectButton } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import AsyncStorage from '@react-native-community/async-storage';
+import api from '../services/api';
 
 import logoImg from '../assets/logo.png';
 import playIcon from '../assets/play.png';
 
+interface CourseRouteParams {
+    id: string;
+}
+
+interface Lesson {
+    id: string;
+    count: number;
+    name: string;
+    duration: number;
+}
+
 export default function Course() {
+    const route = useRoute();
     const navigation = useNavigation();
     const [like, setLike] = useState(false);
+    const [courseLessons, setCourseLessons] = useState<Lesson[]>();
+
+    const { id } = route.params as CourseRouteParams;
+
+    useEffect(() => {
+        api.get(`/lesson/list/${id}`).then(response => {
+            setCourseLessons(response.data);
+        });
+    }, []);
+
+    useEffect(() => {
+        AsyncStorage.getItem('SaveCourses').then(response => {
+            if (response) {
+                let courses = JSON.parse(response);
+
+                const isLiked = courses.indexOf(id) !== -1;
+                
+                setLike(isLiked);
+            }
+        });
+    }, []);
+
+    async function handleLikeCourse() {
+        if (!like) {
+            const likedCourses = await AsyncStorage.getItem('SaveCourses');
+            let courses = [];
+
+            if(likedCourses) {
+                courses = JSON.parse(likedCourses);
+            }
+
+            courses.push(id);
+
+            await AsyncStorage.setItem('SaveCourses', JSON.stringify(courses));
+        } else if (like) {
+            const likedCourses = await AsyncStorage.getItem('SaveCourses');
+
+            if(likedCourses) {
+                const courses = JSON.parse(likedCourses);
+
+                const index = courses.indexOf(id);
+
+                courses.splice(index);
+
+                await AsyncStorage.setItem('SaveCourses', JSON.stringify(courses));
+            }
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -25,7 +87,10 @@ export default function Course() {
 
                 <RectButton
                     style={styles.headerHeartButton}
-                    onPress={() => setLike(!like)}
+                    onPress={async () => {
+                        setLike(!like)
+                        await handleLikeCourse()
+                    }}
                 >
                     <AntDesign
                         name={ like ? "heart" : "hearto" }
