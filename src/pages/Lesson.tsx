@@ -31,13 +31,19 @@ export default function Lesson() {
     const [like, setLike] = useState(false);
     const [lesson, setLesson] = useState<Lesson>();
     const [count, setCount] = useState(c);
+    const [canGoBack, setCanGoBack] = useState(true);
+    const [canGoNext, setCanGoNext] = useState(true);
 
 
     useEffect(() => {
         api.get(`/lesson/list/${id}`).then(response => {
             const resLesson = response.data.filter((l: Lesson) => l.count === count);
 
-            console.log(count);
+            const goBackLesson = response.data.filter((l: Lesson) => l.count === count - 1);
+            const canGoNextLesson = response.data.filter((l: Lesson) => l.count === count + 1);
+
+            setCanGoBack(goBackLesson.length === 0);
+            setCanGoNext(canGoNextLesson.length === 0);
 
             setLesson(resLesson[0]);
         });
@@ -98,7 +104,8 @@ export default function Lesson() {
 
                     <View style={styles.buttonsContainer}>
                         <TouchableOpacity
-                            style={styles.goBackButton}
+                            disabled={canGoBack}
+                            style={!canGoBack ? styles.goBackButton : styles.goBackButtonDisabled}
                             onPress={() => {
                                 setCount(count - 1);
                             }}
@@ -108,7 +115,8 @@ export default function Lesson() {
                         </TouchableOpacity>
 
                         <TouchableOpacity
-                            style={styles.nextButton}
+                            disabled={canGoNext}
+                            style={!canGoNext ? styles.nextButton : styles.nextButtonDisabled}
                             onPress={() => {
                                 setCount(count + 1);
                             }}
@@ -232,6 +240,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    nextButtonDisabled: {
+        opacity: 0.2,
+        width: 163,
+        height: 53,
+
+        backgroundColor: '#FF6680',
+        borderRadius: 40,
+
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     nextButtonText: {
         color: '#FFF',
         fontFamily: 'Roboto_400Regular',
@@ -239,6 +259,17 @@ const styles = StyleSheet.create({
         marginRight: 8
     },
     goBackButton: {
+        width: 163,
+        height: 53,
+
+        borderRadius: 40,
+
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    goBackButtonDisabled: {
+        opacity: 0.2,
         width: 163,
         height: 53,
 
