@@ -1,17 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, View, Text, Image } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-community/async-storage';
+import api from '../../services/api';
 
 import DeleteAlert from '../../components/DeleteAlert';
 
 import mathIcon from '../../assets/mathIcon.png';
 
+interface Course {
+    id: string;
+    name: string;
+    image: string;
+    lessons?: number;
+}
+
 export default function Category() {
     const navigation = useNavigation();
+    const [courses, setCourses] = useState<Course[]>();
     const [selectedAlertOption, setSelectedAlertOption] = useState<'deny' | 'confirm' | null>(null);
     const [showModal, setShowModal] = useState(false);
+
+    useEffect(() => {
+        AsyncStorage.getItem('SaveCourses').then(response => {
+            if(response) {
+                const likedCourses = JSON.parse(response);
+                const setLikedCourses: Course[] = [];
+
+                api.get('/course/list').then(response => {
+                    response.data.map((course: Course) => {
+                        if(likedCourses.indexOf(course.id) !== -1) {
+                            setLikedCourses.push(course);
+                        }
+                    });
+
+                    setCourses(setLikedCourses);
+                });
+            }
+        });
+    }, []);
 
     const selectedOption = (data: 'deny' | 'confirm') => {
         setSelectedAlertOption(data);
@@ -38,33 +67,38 @@ export default function Category() {
                 </View>
 
                 <View style={styles.courseContainer}>
-                    <RectButton
-                        style={styles.courseButton}
-                        onPress={() => navigation.navigate('Course')}
-                    >
-                        <RectButton
-                            style={{
-                                width: 50,
-                                height: 50,
-                                position: "absolute",
-                                right: 2,
-                                top: 5,
+                    {courses?.map(course => {
+                        return (
+                            <RectButton
+                                key={course.id}
+                                style={styles.courseButton}
+                                onPress={() => navigation.navigate('Course')}
+                            >
+                                <RectButton
+                                    style={{
+                                        width: 50,
+                                        height: 50,
+                                        position: "absolute",
+                                        right: 2,
+                                        top: 5,
 
-                                alignItems: "center",
-                                justifyContent: "center",
-                            }}
-                            onPress={() => showModalToggle()}
-                        >
-                            <Feather
-                                name="trash"
-                                color="#C4C4D1"
-                                size={22}
-                            />
-                        </RectButton>
-                        <Image style={styles.courseImage} source={mathIcon} />
-                        <Text style={styles.courseTitle}>Matemática</Text>
-                        <Text style={styles.courseCountLessons}>16 aulas</Text>
-                    </RectButton>
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                    }}
+                                    onPress={() => showModalToggle()}
+                                >
+                                    <Feather
+                                        name="trash"
+                                        color="#C4C4D1"
+                                        size={22}
+                                    />
+                                </RectButton>
+                                <Image style={styles.courseImage} source={mathIcon} />
+                                <Text style={styles.courseTitle}>{course.name}</Text>
+                                <Text style={styles.courseCountLessons}>{course.lessons} aulas</Text>
+                            </RectButton>
+                        );
+                    })}
                 </View>
             </ScrollView>
         </>
