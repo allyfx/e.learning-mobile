@@ -107,32 +107,37 @@ export default function Course() {
                 </View>
 
                 <View style={styles.lessonsContainer}>
-                    <TouchableOpacity 
-                        activeOpacity={1}
-                        style={styles.lessonButton}
-                        onPress={() => { navigation.navigate('Lesson') }}
-                    >
-                        <View style={styles.playButtonViewComplete}>
-                            <Image source={playIcon} />
-                        </View>
+                    {courseLessons?.map(lesson => {
+                        return (
+                            <TouchableOpacity
+                                key={lesson.id}
+                                activeOpacity={1}
+                                style={styles.lessonButton}
+                                onPress={() => { navigation.navigate('Lesson') }}
+                            >
+                                <View style={styles.playButtonView}>
+                                    <Image source={playIcon} />
+                                </View>
 
-                        <View style={styles.lessonContent}>
-                            <Text style={styles.lessonContentTitle}>Introdução à teoria matemática</Text>
+                                <View style={styles.lessonContent}>
+                                    <Text style={styles.lessonContentTitle}>{lesson.name}</Text>
 
-                            <View style={styles.lessonContentFooter}>
-                                <View style={styles.lessonContentSpecify}>
-                                    <Text style={styles.lessonContentSpecifyLessonText}>Aula 01</Text>
-                                    <View style={styles.lessonContentFooterMinutes}>
-                                        <AntDesign name="clockcircleo" size={12} color="#C4C4D1" />
-                                        <Text style={styles.lessonContentSpecifyLessonClockText}>5min</Text>
+                                    <View style={styles.lessonContentFooter}>
+                                        <View style={styles.lessonContentSpecify}>
+                                            <Text style={styles.lessonContentSpecifyLessonText}>Aula {lesson.count}</Text>
+                                            <View style={styles.lessonContentFooterMinutes}>
+                                                <AntDesign name="clockcircleo" size={12} color="#C4C4D1" />
+                                                <Text style={styles.lessonContentSpecifyLessonClockText}>{lesson.duration}min</Text>
+                                            </View>
+                                        </View>
+                                        {/* <View style={styles.lessonContentFooterComplete}>
+                                            <Text style={styles.lessonContentFooterCompleteText}>Completo!</Text>
+                                        </View> */}
                                     </View>
                                 </View>
-                                <View style={styles.lessonContentFooterComplete}>
-                                    <Text style={styles.lessonContentFooterCompleteText}>Completo!</Text>
-                                </View>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
+                            </TouchableOpacity>
+                        );
+                    })}
                 </View>
             </ScrollView>
         </View>
