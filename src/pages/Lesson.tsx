@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, View, Image, Dimensions, Text, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { RectButton } from 'react-native-gesture-handler';
-import { Route, useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import api from '../services/api';
 
 import YoutubePlayer from 'react-native-youtube-iframe';
+import DescriptionDisplay from '../components/DescriptionDisplay';
 
 import logoImg from '../assets/logo.png';
 
@@ -33,6 +34,11 @@ export default function Lesson() {
     const [count, setCount] = useState(c);
     const [canGoBack, setCanGoBack] = useState(true);
     const [canGoNext, setCanGoNext] = useState(true);
+    const [showDescription, setShowDescription] = useState(false);
+
+    function toggleShowDescription() {
+        setShowDescription(!showDescription);
+    }
 
 
     useEffect(() => {
@@ -51,6 +57,14 @@ export default function Lesson() {
 
     return (
         <View style={styles.container}>
+            {showDescription && (
+                <DescriptionDisplay
+                    toggleShowDescription={toggleShowDescription}
+                    description={lesson?.description}
+                    showDescription={showDescription}
+                />
+            )}
+            
             <View style={styles.headerContainer}>
                 <RectButton
                     style={styles.headerHeartButton}
@@ -96,11 +110,14 @@ export default function Lesson() {
                         </View>
                     </View>
 
-                    <ScrollView>
+                    <TouchableOpacity
+                        activeOpacity={1}
+                        onPress={toggleShowDescription}
+                    >
                         <Text style={styles.lessonContentDescription}>
                             {lesson?.description}
                         </Text>
-                    </ScrollView>
+                    </TouchableOpacity>
 
                     <View style={styles.buttonsContainer}>
                         <TouchableOpacity
