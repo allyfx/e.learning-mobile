@@ -14,6 +14,7 @@ E.learning is one of the rewards of the GoStack bootcamp, where the student gets
   - Run `yarn android/ios`.
 
 ## 🚧Built With
+- Expo
 - React Native
 - Typescript
 
